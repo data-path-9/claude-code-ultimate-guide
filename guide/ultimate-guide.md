@@ -19435,22 +19435,59 @@ Before setting up tmux grids or third-party orchestrators, try Agent View — Cl
 
 ### /goal — Autonomous Completion Mode (v2.1.139)
 
-`/goal [condition]` sets a natural-language completion condition. Claude keeps working across turns without waiting for your input, stopping only when it believes the condition is satisfied.
+`/goal <condition>` sets a completion contract for the current session. Claude keeps working across turns until a separate evaluator model verifies the condition is met — no need to send "continue" after each step.
 
-```
+```bash
 /goal all unit tests pass and no TypeScript errors
 /goal the PR description is written and the branch is pushed
-/goal the migration is complete and smoke tests pass
+/goal migrate all legacy API calls to v2 while preserving existing coverage
 ```
 
-While `/goal` is active, a status overlay shows:
-- **Elapsed time** — how long the session has been running
-- **Turns used** — number of back-and-forth turns consumed
-- **Tokens used** — running token consumption
+**How it works**: After each turn, a small fast model (Haiku by default) reads the conversation and judges: "Is the condition met, based only on evidence already in this conversation?" If not, it generates a concise reason explaining the gap, which drives the next turn. If yes, the loop ends. The evaluator cannot independently run commands — it judges solely against what Claude has already surfaced in the conversation.
 
-**When to use**: Long-running tasks where you want to step away and return to a finished result rather than babysitting the session. Works best with clear, verifiable conditions ("tests pass") rather than vague ones ("looks good").
+A live overlay tracks elapsed time, turn count, and token consumption throughout execution.
 
-**Cancel**: Send any message to interrupt before the condition is met.
+**Manage an active goal**:
+
+| Command | Effect |
+|---------|--------|
+| `/goal <condition>` | Set or replace the current goal |
+| `/goal clear` | Cancel the active goal |
+| `/goal status` | Show condition and evaluator's last reason |
+
+**Three elements of an effective condition**:
+
+1. **Measurable end state** — a specific output, test result, or file state. "All tests in `test/auth` pass" beats "improve the auth system."
+2. **Verification mechanism** — how success is demonstrated. "verified by `npm test auth` exit 0."
+3. **Constraints** — what must stay intact throughout. "no files outside `src/services/auth` modified."
+
+Full example: `/goal all tests in test/auth pass, verified by npm test auth exit 0, no files outside src/services/auth modified`
+
+**`/goal` vs `/loop`**:
+
+| | `/goal` | `/loop` |
+|--|---------|---------|
+| Terminates when | Condition verified by evaluator | Time interval elapses |
+| Evaluator | Separate model (Haiku default) | Primary model self-assesses |
+| Best for | Task with a clear, measurable finish line | Ongoing monitoring without a defined end |
+| Example | "Migrate all API calls, tests pass" | "Check the deploy every 5 minutes" |
+
+**Anti-patterns** — skip `/goal` when:
+- The objective is vague or qualitative ("make the code cleaner")
+- Completion requires human judgment the AI cannot verify
+- Production data is involved and every step needs direct oversight
+- There is no concrete, checkable end state
+
+**Permissions**: `/goal` does not expand the session's permission boundary. If the session requires confirmation before executing shell commands, those confirmations still fire inside a goal loop. Configure permission mode deliberately before activating a goal.
+
+**Context rot on long tasks**: Accuracy can degrade after roughly 20 turns as context fills. For tasks requiring many iterations, the "Orchestrator + `claude -p`" pattern keeps each iteration in a clean context:
+
+```bash
+# Each call runs in a fresh session — no context accumulation
+claude -p "Step N of migration: [specific sub-task with explicit context]"
+```
+
+> Introduced in v2.1.139 (May 12, 2026). Evaluator edge-case fixes (background process detection, `disableAllHooks` handling) in v2.1.143 (May 16, 2026). Official docs: [code.claude.com/docs/en/goal](https://code.claude.com/docs/en/goal)
 
 ---
 
