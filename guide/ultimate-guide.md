@@ -18118,7 +18118,7 @@ neonctl branches delete feature-payments
 
 **See also:**
 - [Database Branch Setup Guide](../examples/workflows/database-branch-setup.md) - Complete provider-specific workflows
-- [Neon Branching](https://neon.com/docs/guides/branching) - Official Neon documentation
+- [Neon Branching](https://neon.com/docs/introduction/branching) - Official Neon documentation
 - [PlanetScale Branching](https://planetscale.com/docs/concepts/branching) - Official PlanetScale guide
 
 ### Coordinating Parallel Worktrees: Task Dependencies
