@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Documentation
+
+- **Claude Code Releases**: Updated tracking to v2.1.148
+  - v2.1.147: Pinned background sessions (Ctrl+T in claude agents), /code-review --comment for inline GitHub PR comments, improved auto-updater with retry/error reporting, 30+ bug fixes (prompt history duplicates, PowerShell hook if-conditions, pasted text placeholder, plugin component counts doubled)
+  - v2.1.148: Hotfix for Bash tool returning exit code 127 regression from 2.1.147
+
 ### Added
 
 - **Copilot instructions file** (`.github/copilot-instructions.md`): Points Copilot users to `/CLAUDE.md` as the source of truth and reminds contributors to update `CHANGELOG.md`.
