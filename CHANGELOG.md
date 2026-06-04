@@ -6,12 +6,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Documentation
+
+- **Claude Code Releases**: Updated tracking to v2.1.162 (2026-06-04)
+  - v2.1.162: Quieter startup, `claude agents --json` waitingFor, slash-command fill-in, Windsurf renamed Devin Desktop, 25+ bug fixes
+  - v2.1.161: OTEL custom dimensions, agents done/total, /mcp unused connectors collapsed, parallel tool-call isolation, 20+ bug fixes
+  - v2.1.160: `ultracode` replaces `workflow` keyword (breaking), security prompts for startup files and build-tool configs, Edit after grep, 20+ bug fixes
+  - v2.1.159: Internal infrastructure improvements (no user-facing changes)
+
+### Added
+
+- **`eval-agents` skill** (`examples/skills/eval-agents/SKILL.md`): new audit skill for Claude Code agent fleets. Scores agents on 5 criteria (name, description specificity, model tier, tools scoping, system prompt quality) out of 15 pts with a +1 hardening bonus. Detects description overlap between agents that causes non-deterministic orchestrator dispatch, flags missing `tools:` fields (unconstrained session tool inheritance), identifies human-in-the-loop anti-patterns that break headless pipelines, and checks model-task alignment using the haiku/sonnet/opus matrix. Follows the same interactive review pattern as `eval-hooks` and `eval-rules`.
+
+### Changed
+
+- **`eval-rules` skill updated** (`examples/skills/eval-rules/SKILL.md`): added user-level rules (`~/.claude/rules/`) to Key Concepts and Step 1 discovery, documented brace expansion support in `paths:` globs, noted symlink support as a named edge case, added `InstructionsLoaded` hook tip for debugging load issues, removed all em dashes from template output examples.
+- **`eval-skills` skill updated** (`examples/skills/eval-skills/SKILL.md`): full valid frontmatter table (agentskills.io spec + Claude Code extensions), string substitution placeholder reference, `xhigh`/`max` effort level added to inference engine, scoring raised to 16 pts, removed stale `skills-ref` CLI pre-check section.
+- **73 example skills audited and corrected** (`examples/skills/`): removed U+2014 em dashes from ~30 files (hook-enforced ban); removed unsupported `tags:` field from all 7 talk-pipeline sub-skills; fixed `allowed-tools` comma-without-brackets format in 10 files (design-patterns, eval-rules, eval-hooks, plan-pipeline, all 7 talk-pipeline stages); corrected 4 effort mismatches (review-pr and talk-pipeline/orchestrator bumped to `high`, security-check and validate-changes bumped to `medium`); added `when_to_use:` trigger phrasing to 18 skills; added `allowed-tools: Read Grep Glob` to methodology-advisor; scoped `Bash(ccboard*)` on ccboard.
+
 ### Fixed
 
 - **Broken URLs corrected across 11 files**: `florian.bruniaux.com/guides` replaced with `cc.bruniaux.com/whitepapers/` in `docs/for-cto.md`, `llms.txt`, `machine-readable/llms.txt`, `machine-readable/reference.yaml`, `mcp-server/content/llms.txt`, `mcp-server/content/reference.yaml`, `CLAUDE.md`, `AGENTS.md`. Also fixed `quiz.html` → `/quiz/` and `cheatsheet.html` → `/cheatsheet/` in all three `llms.txt` files (no Vercel redirect existed for those `.html` paths).
 
 ### Documentation
 
+- **Hooks documentation completed and corrected across 6 files**: fixed a factual bug in the lifecycle diagram (`PreToolUse` was labeled `Exit 1: block`, the correct blocking exit code is 2); aligned the hook-event count from 27/19 to 30 across `guide/ultimate-guide.md` §7, `machine-readable/reference.yaml`, `quiz/questions/07-hooks.yaml`, `guide/core/settings-reference.md`, and `examples/hooks/README.md`; added the 3 previously missing events (`PostToolBatch`, `UserPromptExpansion`, `MessageDisplay`) to all event tables; corrected `PreCompact` and `TaskCreated` Can-Block fields (both were marked No, both are Yes); added the `mcp_tool` hook type and the `asyncRewake` field to the §7 type list and the configuration table; added `terminalSequence` to the universal JSON output fields; added a `/hooks` menu description in §7.2; enriched the lifecycle diagram with `PermissionRequest` and `SubagentStop` nodes; updated stale line-number anchors in `reference.yaml`; and extended the `examples/hooks/README.md` events table from 17 to 30 events grouped by category.
+
+- **Ruflo entry refreshed** (`guide/ecosystem/third-party-tools.md`): npm name corrected to `ruflo` (was `claude-flow`), agent counts updated to 98 agents and 30 skills, dual install paths documented (plugin-lite vs full CLI), agent federation section added (zero-trust cross-machine collaboration, absent from the entire guide before this update), plugin marketplace (33 plugins) and web surfaces (flo.ruv.io, goal.ruv.io) noted. Resource evaluation `docs/resource-evaluations/074-ruflo-multi-agent-orchestration.md` updated with a dated English update block reflecting the stable rebrand and federation capability; score revised from 3/5 to 4/5.
 - **Claude Code Releases**: Updated tracking to v2.1.158 (2026-05-30)
   - v2.1.158: Auto mode on Bedrock, Vertex, Foundry for Opus 4.7/4.8 (`CLAUDE_CODE_ENABLE_AUTO_MODE=1`)
   - v2.1.157: Plugin auto-loading from `.claude/skills`, `claude plugin init`, mid-session worktree switching, 20+ bug fixes
