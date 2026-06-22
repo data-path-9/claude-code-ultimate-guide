@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Documentation
+
+- **Claude Code Releases**: Updated tracking to v2.1.185
+  - Improved stream-stall hint: clearer "Waiting for API response · will retry in …" message (was "No response from API · Retrying in …") and 20s silence trigger (was 10s)
+
 ### Added
 
 - **llms.txt / llms-full.txt / machine-readable/llms.txt stats sync** (3 files): updated Last Updated to June 21 2026, Lines of Documentation from 26,058 to 26,494 (reflects current ultimate-guide.md line count), Production Templates from 314 to 262 (authoritative count from check-landing-sync.sh method), and inline body references in llms-full.txt (FAQ answer, repo structure, What Is section).
