@@ -1,6 +1,6 @@
 ---
-title: "Claude Code Data Privacy: Risks the Official Docs Don't Cover"
-description: "The privacy risks specific to Claude Code that docs.anthropic.com doesn't document: /bug command 5-year retention override, MCP database exposure, silent browser host installation, and how to lock down each with permissions.deny and PreToolUse hooks."
+title: "Claude Code Privacy: What Gets Sent to Anthropic & How to Control It"
+description: "What Claude Code sends to Anthropic servers: code context, file paths, shell commands, MCP logs. Data retention by plan (Consumer 5 yr, ZDR 0 days). Practical controls via env vars and PreToolUse hooks."
 tags: [privacy, security, guide]
 ---
 
