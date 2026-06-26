@@ -385,6 +385,11 @@ echo $DISABLE_ERROR_REPORTING
 **7. Shell command exposure**
 Run `env | grep -iE 'key|secret|token|pass'` to see what environment variables are currently set. Any that appear here will be visible to Claude if it runs a bash command in that shell session.
 
+## Go further
+
+- [Whitepapers](/whitepapers/) - in-depth security and privacy analyses
+- [Security](/security/) - CVE tracking, threat campaigns, and hardening
+
 ---
 
 ## Changelog
