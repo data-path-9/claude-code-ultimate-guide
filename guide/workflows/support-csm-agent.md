@@ -104,7 +104,7 @@ The human-review step (H) is not optional and should not get automated away, eve
 
 ## MCP Servers for This Pattern
 
-None of the servers below are official Anthropic or vendor-published servers. Treat them as community tooling and re-verify maintenance status before depending on one in production. The `modelcontextprotocol/servers` canonical registry does not currently list HubSpot or Zendesk servers.
+None of the servers below are published by Anthropic, HubSpot, or Zendesk themselves. Treat them as community tooling and re-verify maintenance status before depending on one in production. The official MCP Registry (`registry.modelcontextprotocol.io`) does list several self-published HubSpot/Zendesk entries, but registry presence just means someone submitted it, not that the vendor endorses it; see the [Customer Support & CRM section](../ecosystem/mcp-servers-ecosystem.md#customer-support--crm) for the full reasoning. The servers picked here were chosen by GitHub star count and commit recency instead.
 
 | System | Server | Coverage | Notes |
 |--------|--------|----------|-------|

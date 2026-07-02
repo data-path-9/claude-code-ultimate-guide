@@ -1180,9 +1180,11 @@ Result: Status changed
 
 ### Customer Support & CRM
 
+**A note on "official" for this category.** The `modelcontextprotocol/servers` GitHub repo is not a discovery registry: its README explicitly defers to the official MCP Registry (`registry.modelcontextprotocol.io`) for finding published servers, and only carries a handful of steering-group reference implementations that it labels "not production-ready." The official registry itself does list several self-published HubSpot and Zendesk servers (queryable at `/v0/servers?search=<name>`), but registry presence only means a maintainer submitted an entry, not that HubSpot or Zendesk vetted or endorses it. Neither company publishes its own server. The servers below were picked by star count and commit recency on GitHub instead, a stronger signal than registry presence alone at the time of evaluation.
+
 #### HubSpot MCP
 
-**Community servers** exposing the HubSpot API (contacts, companies, deals, engagements) to Claude Code. No official Anthropic or HubSpot-published server exists as of this writing; the `modelcontextprotocol/servers` registry does not list one.
+**Community servers** exposing the HubSpot API (contacts, companies, deals, engagements) to Claude Code.
 
 **Use Case**: A support or CSM agent reads live account data (plan, ticket history, deal stage) without the human switching tabs, or drafts a reply informed by the client's actual CRM record. See [support-csm-agent.md](../workflows/support-csm-agent.md) for the full pattern this connects to.
 
