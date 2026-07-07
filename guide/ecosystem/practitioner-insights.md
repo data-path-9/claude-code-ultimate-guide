@@ -8,7 +8,7 @@ tags: [guide, community, insights]
 
 This page collects paraphrased field reports from engineers and technology leads who have built production systems with LLMs and agentic tooling. These are practitioner accounts, not vendor documentation. Every insight is attributed to its source.
 
-The inaugural source is [IFTTD](https://www.ifttd.io/) (If This Then Dev), a French tech podcast hosted by Bruno Soulez covering practical software engineering. Episodes 290 to 361 (roughly 2024-2025) were analyzed for patterns applicable to Claude Code workflows. Verbatim transcripts were available for 55 recent episodes.
+The corpus now spans six sources. [IFTTD](https://www.ifttd.io/) (If This Then Dev), a French tech podcast hosted by Bruno Soulez covering practical software engineering, remains the largest with episodes 290 to 361 (roughly 2024-2025) and verbatim transcripts for 55 recent episodes. Devoxx adds talks from its Java/JVM and architecture conference family, Dev With AI contributes from a French AI-native development meetup, and ByteByteGo covers system design. Stanford Online supplies academic coursework on machine learning and large language models, and The Product Crew rounds out the set with a French product-management podcast. Every talk and episode across the six sources was analyzed for patterns applicable to Claude Code workflows and paraphrased; no direct quotes appear on this page.
 
 ---
 
@@ -53,6 +53,48 @@ The inaugural source is [IFTTD](https://www.ifttd.io/) (If This Then Dev), a Fre
 **Inject live context into tool descriptions, not just the prompt body.** Tool descriptions are parsed by the model with high attention before the conversation begins. Including dynamic facts there (current date, session state, active tenant) reaches the model at a point of maximum focus and compensates for knowledge cutoffs without polluting the main prompt.
 
 *Frédéric Barthelet (engineer), [IFTTD ep 329 "Front agentique"](https://www.ifttd.io/episodes/front-agentique)*
+
+---
+
+**Context quality drops sharply around 70% of the budget used, not gradually.** Nine independent speakers at the same meetup converged on this threshold: once a session crosses roughly 70% of its context window, output quality falls off a cliff rather than declining in a straight line. The practical implication is to purge or compact context before hitting that mark, not after symptoms appear. Malo and Dorian emphasized the abruptness of the drop specifically, warning that teams who wait for visible signs of confusion have usually already crossed the threshold.
+
+*Emmanuel Sciara, Dev With AI Meetup, 2026*
+
+---
+
+**Too much context can cause hallucination just as reliably as too little.** The failure mode is symmetric: practitioners tend to guard against starving a model of context, but flooding it with more than it needs induces the same kind of confident, wrong answers. This nuances the 70% threshold above: the ceiling is not just about volume, it is about matching what is actually relevant to the task.
+
+*Victor Rentea, Devoxx, 2026*
+
+---
+
+**A growing CLAUDE.md file degrades model performance, not just token cost.** The common reflex when an agent misbehaves is to add another paragraph to the system prompt. Multiple practitioners at the same meetup reported the opposite effect: past a certain size, the extra instructions compete for attention and measurably worsen output quality. Modularizing into separate, scoped files that get loaded only when relevant outperforms a single accumulating system prompt.
+
+*Florian Allainmat, Dev With AI Meetup, 2026; Samuel Gallet & Geslain Dahan, Dev With AI Meetup, 2026*
+
+---
+
+**Markdown files work as persistent memory shared across agents, alongside a dedicated conventions file.** Rather than standing up a database for agent memory, plain Markdown files checked into the repository serve the same purpose: durable, versioned, and readable by both humans and agents. A separate file listing code convention rules complements this, mapping onto the same idea as a CLAUDE.md or AGENTS.md file.
+
+*Alex Gavrilescu, Devoxx, 2025; Konstantin Pavlov, Devoxx, 2025*
+
+---
+
+**Structure agent work as Research, Plan, Implement, with a handoff document at each step.** Each phase produces an artifact (`research.md`, `plan.md`) that the next phase consumes instead of relying on conversational memory. The research document cites file paths and line numbers directly, so the plan phase can verify claims instead of trusting a summary.
+
+*Emmanuel Sciara, Dev With AI Meetup, 2026*
+
+---
+
+**"Reasoning" in an LLM is operationally defined as the intermediate tokens generated between input and output, not a separate cognitive faculty.** A formal result attaches to this framing: a transformer allowed to produce a chain-of-thought can solve any problem solvable by a boolean circuit, given a constant number of intermediate steps. This is the theoretical grounding for deliberately giving a model room to generate tokens before an answer, the mechanism behind extended thinking and chain-of-thought prompting.
+
+*Denny Zhou (Google DeepMind), Stanford CS25 V5, 2025*
+
+---
+
+**In-context generation often beats fine-tuning for injecting new knowledge.** Two independent courses converge on the same conclusion: retrieval-augmented prompting typically outperforms fine-tuning when the goal is teaching a model a new fact, partly because fine-tuned models suffer from the "reversal curse," learning that A implies B without being able to infer that B implies A.
+
+*Stanford CS25, 2026; CS230 Lecture 8, 2025*
 
 ---
 
@@ -112,6 +154,42 @@ The inaugural source is [IFTTD](https://www.ifttd.io/) (If This Then Dev), a Fre
 
 ---
 
+**Claude Code does not loop indefinitely by default; define explicit exit criteria anyway.** A session left without a completion promise or a maximum iteration count can burn tokens without ever converging on a working state. Setting an explicit stopping condition, either a defined "done" state or a hard iteration cap, prevents the agent from spinning on a task it cannot resolve.
+
+*Vyncke, Dev With AI Meetup, 2026*
+
+---
+
+**Over-constraining an agent degrades output about as much as giving it no spec at all.** This is the "spec paradox": a rigid, exhaustive specification leaves no room for the model to apply judgment, producing brittle results similar to an underspecified prompt. Counterintuitively, a more ambitious goal sometimes improves the creativity of what comes back. A field report from Picnic illustrates the failure mode downstream: perceived productivity with an AI assistant rises in the short term, then degrades once review capacity cannot keep pace, and code shipped fast ends up needing repeated rework.
+
+*Max Sumrall, Devoxx, 2026*
+
+---
+
+**Insert an "analyze" step between plan and implementation.** This step triangulates the spec, the plan, and the task breakdown against each other, surfacing contradictions and orphaned tasks before any code gets touched. Catching a mismatch at this stage costs a re-read; catching it during implementation costs a rewrite.
+
+*Luis Iglesias Hernandez, Dev With AI Meetup, 2026*
+
+---
+
+**LLMs do not solve combinatorial optimization problems; pair them with classical solvers instead.** Planning and routing problems, vehicle routing or scheduling for instance, are exactly the kind of task where asking a model for a complete solution produces plausible-looking but wrong answers. The practical boundary: let the model handle the parts that require language and judgment, and delegate the actual optimization to a dedicated solver.
+
+*Tom Cools, Devoxx, 2026*
+
+---
+
+**Externalize every effectful operation through controlled, validated, and logged tools; never let the model act directly on the system.** Script execution, file writes, and any other operation with side effects should go through a runtime that validates and journals the action, rather than trusting the model's direct output. This keeps a deterministic audit trail between what the model proposes and what actually executes.
+
+*Alexandre Balmes, Dev With AI Meetup, 2026; Florian Allainmat, Dev With AI Meetup, 2026*
+
+---
+
+**Start simple, measure, and add complexity only once the need is proven.** Designing for maximum scale from day one is a common anti-pattern: the complexity cost lands immediately, while the need for that scale usually stays hypothetical. The same logic applies directly to agent setups, hooks, and skills, where premature over-engineering is one of the more frequent traps.
+
+*ByteByteGo, "7 System Design Concepts", 2025*
+
+---
+
 ## LLM Evaluation
 
 **Evaluation is a scored dataset, not a red/green test.** Unit tests that pass or fail deterministically do not apply to probabilistic outputs. Instead, build a dataset of inputs paired with expected outputs, run a scoring function, and track the score over time. The goal is moving from 85% to 87% to 89%, not achieving a binary pass state.
@@ -147,6 +225,48 @@ The inaugural source is [IFTTD](https://www.ifttd.io/) (If This Then Dev), a Fre
 **When an AI disappoints, the cause is almost always context or prompting.** When an LLM system produces poor output, the most common root cause is insufficient or misaligned context, not model incapability. Abandoning an AI tool after one failure is a high-cost error. Diagnose the context first: what was missing, misrepresented, or ambiguous in the input?
 
 *Louis Pinsard (CTO, Dialogue), [IFTTD ep 338 "Evaluation de GenAI"](https://www.ifttd.io/episodes/evaluation-de-genai)*
+
+---
+
+**Temperature 0 does not guarantee deterministic output.** Floating-point variance on GPU hardware and Mixture-of-Experts routing both introduce variation even at zero temperature. Determinism, when it matters, has to be engineered around the model rather than assumed from it: versioned APIs, a pinned model version in production, and versioned prompts.
+
+*Alexandre Balmes, Dev With AI Meetup, 2026*
+
+---
+
+**The same prompt can produce a different response two days apart, even under controlled temperature.** Never assume a stable answer holds over time. This strengthens the case for continuous evaluation over a single evaluation pass: a system that passed its eval last month is not guaranteed to still pass it today.
+
+*Brian Vermeer, Devoxx, 2026*
+
+---
+
+**Match the evaluation metric to the phase, and default to out-of-distribution testing.** A lightweight metric fits a dev-loop feedback cycle; a costly, qualitative one fits model selection; a reliable, monitored one fits production. Test against cases unlike the training distribution by default, not just similar ones, and watch for benchmarks potentially contaminated by the tested model's own training data. For human or LLM-as-judge evaluation, measure inter-rater agreement with Cohen's kappa rather than a raw percentage agreement, which overstates consistency when raters agree by chance.
+
+*Yann Dubois, Stanford CS224N, 2024; CS336 Lecture 12, 2026*
+
+---
+
+**Combine several evaluation frameworks rather than relying on one, and force structured output over free text.** No single framework covers every metric that matters for a given system. Requiring a structured schema, a Pydantic model for instance, instead of parsing free-form text removes an entire class of parsing failures from the evaluation pipeline itself.
+
+*Mete Atamel, Devoxx, 2025*
+
+---
+
+**An agent is evaluated on confidence, not coverage.** Component-by-component quality matters, but so does the complete system's behavior under guardrails. A useful reframing organizes that evaluation around three pillars, principle, policy, and personality, rather than trying to score every possible path through the agent.
+
+*Jettro Coenradie & Daniël Spee, Devoxx, 2026*
+
+---
+
+**Skill self-improvement works like applied reinforcement learning.** Incremental modifications get tested against a binary criterion: keep what improves the outcome, discard what does not. Evaluating a skill itself works best on two layers, whether it activates at the right moment, and the quality of its output once activated, with human supervision reserved for edge cases.
+
+*Emmanuel Sciara, Dev With AI Meetup, 2026; Negouai & Drode, Dev With AI Meetup, 2026*
+
+---
+
+**Verify that a model is actually needed before adding one.** Extra sophistication has to prove its marginal gain: an LLM remains hard to control even inside the best teams, and prompting or retrieval usually gets you further than fine-tuning before either is justified. This is one of the stronger convergences across the corpus, echoed independently by academic coursework.
+
+*Stanford, ISLR (Hastie & Tibshirani); CS230 Lecture 8, 2025*
 
 ---
 

@@ -115,6 +115,23 @@ Claude now supports interactive tools via MCP Apps spec:
 
 - **Announcement**: [Microsoft DevBlogs](https://devblogs.microsoft.com/visualstudio/azure-mcp-server-now-built-in-with-visual-studio-2026-a-new-era-for-agentic-workflows/)
 
+### Protocol Roadmap (Mid-2026)
+
+The Model Context Protocol has no IETF- or W3C-style standards body behind the term itself; the closest thing to institutional formalization is MCP's own versioned specification track, now under Linux Foundation governance (see above).
+
+A release candidate published 2026-07-28 adds four changes worth tracking:
+
+- **Stateless protocol core**: a baseline that does not require session state, useful for serverless and edge deployments of MCP servers
+- **Extensions framework**: a formal mechanism for adding capabilities (MCP Apps, above, is the first shipped example) without revising the core spec
+- **Tasks**: long-running operation support, relevant for MCP servers wrapping asynchronous backends
+- **Formal deprecation policy**: a documented process for retiring spec features, plus continued authorization hardening
+
+Source: [MCP roadmap blog](https://blog.modelcontextprotocol.io/posts/2026-mcp-roadmap/), [2026-07-28 release candidate announcement](https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/).
+
+### NSA Security Guidance (June 2026)
+
+The US National Security Agency published MCP-specific security guidance in June 2026 ([CSI_MCP_SECURITY.PDF](https://media.defense.gov/2026/Jun/02/2003943289/-1/-1/0/CSI_MCP_SECURITY.PDF)), the first guidance-level attention from a national security agency on the protocol. It is security guidance, not a methodology standard, but it marks MCP's shift from a developer convenience into something institutions treat as an attack surface worth documenting. Cross-reference against the [Security Checklist](#security-checklist) below when evaluating a new MCP server for production use.
+
 ---
 
 ## Version Control (Official Servers)
