@@ -73,6 +73,10 @@ All community servers are evaluated against these criteria:
 
 **The LLM is stateless; the client holds all routing intelligence.** The model receives tool schemas on each request but has no memory of prior server calls from earlier in the session. Claude Code (as the MCP client) is responsible for routing, retrying, and composing results. Understanding this separation prevents the common mistake of treating a remote MCP server as an intelligent collaborator rather than as a stateless API. (Zineb Bendhiba, Principal Software Engineer at Red Hat, [IFTTD ep 326 "MCP Servers"](https://www.ifttd.io/episodes/mcp-servers))
 
+**MCP is best read as a standardized integration layer, not a new paradigm.** Rather than writing one bespoke integration per data source or tool, the protocol lets a single client speak one language to many servers. Framing it this way cuts through a lot of the hype cycle around MCP: it is the same problem system design has solved before with API gateways and service meshes, applied to how LLMs reach tools. (ByteByteGo, "MCP", 2025)
+
+**Sizing a server for an agentic client starts from the same back-of-the-envelope formula used for any API, with one caveat.** A rough estimate: QPS equals active users times actions per user divided by 86,400 seconds in a day, with peak load usually running two to three times above that average. That peak multiplier was calibrated on human traffic patterns and is probably an underestimate for agents, which tend to hit a server in bursts rather than a smoothed-out stream throughout the day; size headroom accordingly. (ByteByteGo, "Back-of-the-Envelope Estimation," 2022, and "URL Shortener," 2025)
+
 ---
 
 ## Ecosystem Evolution

@@ -308,6 +308,36 @@ The corpus now spans six sources. [IFTTD](https://www.ifttd.io/) (If This Then D
 
 ---
 
+**Test at least five prompt injection techniques before putting an agent into production.** System message manipulation, structured-output attacks, role-play framing to bypass refusals, and multi-turn manipulation all deserve a dedicated pass before launch. The same caution applies to installing a skill or agent definition sourced from the internet without review: it is a direct injection vector, not a convenience shortcut.
+
+*Brian Vermeer, Devoxx, 2026*
+
+---
+
+**Do not let an agent decide its own permissions.** Wrap it in an MCP server with deterministic access control around it, rather than trusting the model's own judgment about what it should be allowed to do. Scope rights precisely through OAuth and fine-grained relationship-based authorization, in the style of OpenFGA.
+
+*Christoph Bühler, Devoxx, 2026; Deepu Sasidharan, Devoxx, 2025*
+
+---
+
+**An MCP server exposed over HTTP needs the same security discipline as any API.** Authentication, authorization, and HTTPS are not optional because the client happens to be a model. A local MCP server left without authentication or with un-hardened defaults remains an exploitable attack surface even when the model itself has no flaw.
+
+*Daniel Garnier-Moiroux, Devoxx, 2025; Makan Sepehrifar, Devoxx, 2026*
+
+---
+
+**Treat LLM sessions as a sensitive channel, the same way a code repository is treated.** The more developers write code through an AI assistant, the higher the risk of API keys leaking into prompts and into the logs that capture them. Session logs deserve the same access controls as source control, not an afterthought.
+
+*Brian Vermeer, Devoxx, 2026*
+
+---
+
+**Isolate production agents in an ephemeral, read-only container.** Read-only access to the repository, a network allowlist, CPU and RAM quotas, and a maximum session duration together bound what a runaway session can do. This converges with the Docker Sandbox and micro-VM pattern already covered in the IFTTD corpus above.
+
+*Dev With AI Meetup, 2026 (Bolin, Vyncke, Allainmat)*
+
+---
+
 ## DevX & Adoption
 
 **Treat the agent as a new developer who needs onboarding.** An agent given a well-maintained AGENTS.md file and up-to-date rules about how your codebase works (database connection patterns, message bus encoding, naming conventions) produces dramatically better output than one dropped into an undocumented codebase. At ManoMano, a dedicated platform team maintains skills and rules so agents understand the internal architecture. The agent-facing documentation is now better maintained than the team's Confluence wiki.
@@ -352,6 +382,36 @@ The corpus now spans six sources. [IFTTD](https://www.ifttd.io/) (If This Then D
 
 ---
 
+**AI amplifies a team's existing practices, good and bad alike.** A team with weak practices before adopting an AI assistant tends to see its anti-patterns get worse, not corrected, contradicting the narrative that AI democratizes good engineering habits by default.
+
+*Geoffrey Graveaud, Dev With AI Meetup, 2026*
+
+---
+
+**Full delegation of user stories to unsupervised, always-on agents cost one team velocity instead of gaining it.** The regression was only caught because the team deliberately set out to measure it, not because it was visible day to day. It stands out as a rare, honestly reported failure case rather than a success story.
+
+*Samuel Gallet & Geslain Dahan, Dev With AI Meetup, 2026*
+
+---
+
+**Instrument coding assistants themselves, including Claude Code and Codex, with OpenTelemetry.** Tracing every decision an assistant makes applies the same discipline already used for services: a system that cannot be observed is a system that cannot be trusted, and that principle does not stop at the boundary of the tool writing the code.
+
+*Annie Freeman, Devoxx, 2026*
+
+---
+
+**Deliberately simulate scenarios where the AI is unavailable or degraded.** Running this as a drill checks whether the system, and the team, still function without it, the same way a chaos engineering exercise checks resilience to infrastructure failure.
+
+*Konstantin Pavlov, Devoxx, 2025*
+
+---
+
+**The critical skill for the next generation of engineers is verifying AI-generated code, not writing code from scratch.** This legitimizes a posture of systematic review on everything an agent produces, treating review capacity as the actual bottleneck rather than generation speed.
+
+*Mehran Sahami, Stanford, "It's Never Too Late", 2025*
+
+---
+
 ## Sources
 
 ### IFTTD Podcast
@@ -371,6 +431,65 @@ The corpus now spans six sources. [IFTTD](https://www.ifttd.io/) (If This Then D
 | [ep 357](https://www.ifttd.io/episodes/azure-et-ia) | Antonio Goncalves | Java Champion, dev advocate | Model routing |
 | [ep 360](https://www.ifttd.io/episodes/docker-sandbox) | Guillaume Lours | Software Engineer, Docker | Agent sandboxing |
 | [ep 361](https://www.ifttd.io/episodes/rag) | Guillaume Laforge | Developer Advocate, Google Cloud | RAG & context |
+
+### Devoxx
+
+Devoxx is a family of developer conferences covering Java, DevOps, architecture, and AI. Talks cited on this page were paraphrased from the 2025 and 2026 editions; no direct quotes appear on this page.
+
+| Speaker | Role / Company | Theme |
+|---------|----------------|-------|
+| Victor Rentea | Speaker, Devoxx | Context volume & hallucination |
+| Alex Gavrilescu | Speaker, Devoxx | Agent memory & conventions |
+| Konstantin Pavlov | Speaker, Devoxx | Agent memory & resilience drills |
+| Max Sumrall | Speaker, Devoxx | Spec paradox |
+| Tom Cools | Speaker, Devoxx | Combinatorial optimization |
+| Brian Vermeer | Speaker, Devoxx | Prompt injection & evaluation drift |
+| Mete Atamel | Speaker, Devoxx | Evaluation frameworks |
+| Jettro Coenradie & Daniël Spee | Speakers, Devoxx | Agent evaluation |
+| Christoph Bühler | Speaker, Devoxx | Agent permissions |
+| Deepu Sasidharan | Speaker, Devoxx | Agent permissions |
+| Daniel Garnier-Moiroux | Speaker, Devoxx | MCP server security |
+| Makan Sepehrifar | Speaker, Devoxx | MCP server security |
+| Annie Freeman | Speaker, Devoxx | Assistant observability |
+
+### Dev With AI Meetup
+
+Dev With AI is a French meetup dedicated to AI-native development practices. Talks cited on this page were paraphrased from the 2026 edition; no direct quotes appear on this page.
+
+| Speaker | Role / Company | Theme |
+|---------|----------------|-------|
+| Emmanuel Sciara | Speaker, Dev With AI Meetup | Context thresholds & RPI workflow |
+| Malo & Dorian | Speakers, Dev With AI Meetup | Context degradation |
+| Florian Allainmat | Speaker, Dev With AI Meetup | CLAUDE.md size & tool isolation |
+| Samuel Gallet & Geslain Dahan | Speakers, Dev With AI Meetup | Agent delegation velocity |
+| Vyncke | Speaker, Dev With AI Meetup | Agent exit criteria & sandboxing |
+| Luis Iglesias Hernandez | Speaker, Dev With AI Meetup | Plan/implementation analysis |
+| Alexandre Balmes | Speaker, Dev With AI Meetup | Determinism & tool isolation |
+| Negouai & Drode | Speakers, Dev With AI Meetup | Skill self-improvement |
+| Geoffrey Graveaud | Speaker, Dev With AI Meetup | AI amplifying team practices |
+| Bolin | Speaker, Dev With AI Meetup | Agent sandboxing |
+
+### ByteByteGo
+
+ByteByteGo is a system design channel covering architecture and scaling patterns. One talk is cited on this page, paraphrased; no direct quotes appear.
+
+| Speaker | Role / Company | Theme |
+|---------|----------------|-------|
+| ByteByteGo | System design channel | Scaling only on proven need |
+
+### Stanford Online
+
+Stanford Online publishes academic coursework on machine learning and large language models. Lectures cited on this page were paraphrased; no direct quotes appear on this page.
+
+| Speaker | Role / Company | Theme |
+|---------|----------------|-------|
+| Denny Zhou | Google DeepMind, Stanford CS25 V5 | Reasoning as intermediate tokens |
+| Yann Dubois | Stanford CS224N | Evaluation metrics & OOD testing |
+| Mehran Sahami | Stanford, "It's Never Too Late" | Verifying AI-generated code |
+| CS25 (2026 cohort) | Stanford Online | In-context learning vs. fine-tuning |
+| CS230 Lecture 8 | Stanford Online | In-context learning vs. fine-tuning |
+| CS336 Lecture 12 | Stanford Online | Evaluation metrics |
+| ISLR (Hastie & Tibshirani) | Stanford textbook / course | Verifying LLM necessity |
 
 ---
 

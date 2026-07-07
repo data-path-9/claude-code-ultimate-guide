@@ -245,6 +245,8 @@ The question "should I just use the 1M context window?" is really a question abo
 
 These are engineering estimates, not guaranteed values. Treat them as planning figures: if your session regularly approaches 150K tokens, it is time to implement compaction, graduated offloading, or path-scoping before accuracy becomes a problem, not after.
 
+**A sharp, non-linear quality drop shows up around 70% of the context budget used, rather than a smooth decline.** Nine speakers from the same conference corpus converged independently on this same threshold without coordinating with each other beforehand, which is a rare and strong signal for a claim usually reported as a vague hunch. The practical consequence is about timing: purge or compact context before crossing that threshold, not after the drop already shows up in the output. (*Emmanuel Sciara, Dev With AI Meetup, 2026. Malo and Dorian, same corpus and year, describe the same shift as abrupt rather than gradual.*)
+
 ### Path-Scoping and Budget Efficiency
 
 Path-scoping is the most effective single technique for reducing always-on context. Instead of loading all rules for all parts of the codebase, you load only the rules relevant to the files currently in context.
@@ -447,6 +449,8 @@ A 600-line CLAUDE.md with no structure is the most common failure mode in produc
 5. Adherence degrades progressively as the file grows
 
 The fix is architectural: decompose the monolith into focused modules, then use path-scoping to load each module only when relevant.
+
+**A CLAUDE.md file that keeps growing hurts the model's performance directly, not just the token bill.** The common reflex when Claude gets something wrong is to add one more rule to the system prompt, on the assumption that more context can only help. Two independent talks from the same 2026 meetup reached the opposite conclusion: past a certain size, splitting rules into separate modular files outperforms piling them into one growing document, because the file itself becomes the bottleneck the model has to work around. (*Florian Allainmat, Dev With AI Meetup, 2026. Gallet and Dahan, same corpus and year, report the same independent finding.*)
 
 ### Path-Scoping Pattern
 
@@ -2187,6 +2191,10 @@ For every factual claim you include in your response:
 ```
 
 The difference between claim-source mapping as a QA mechanism vs as a compliance mechanism: compliance tracking asks "did we use authorized sources?", QA tracking asks "is this specific claim accurate?" Both are valuable but for different failure modes. Agents that handle factual queries or generate reports need the QA version.
+
+### Chain-of-Thought as a Formal Compute Extension
+
+**A model's "reasoning" is defined operationally as the intermediate tokens it generates between an input and an output, not as some separate cognitive faculty.** This reframing carries a formal backing: a transformer that is allowed to produce a chain of reasoning before answering can solve any problem solvable by a Boolean circuit, given a constant number of intermediate steps. This is the theoretical anchor for why extended thinking and chain-of-thought prompting change what a model is capable of, not just how it explains its answer: token budget spent on reasoning is compute budget, not commentary. (*Denny Zhou, Google DeepMind, Stanford CS25 V5, 2025*)
 
 ### New Research Directions (April to July 2026)
 
