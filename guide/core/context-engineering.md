@@ -249,7 +249,7 @@ The question "should I just use the 1M context window?" is really a question abo
 
 These are engineering estimates, not guaranteed values. Treat them as planning figures: if your session regularly approaches 150K tokens, it is time to implement compaction, graduated offloading, or path-scoping before accuracy becomes a problem, not after.
 
-**A sharp, non-linear quality drop shows up around 70% of the context budget used, rather than a smooth decline.** Nine speakers from the same conference corpus converged independently on this same threshold without coordinating with each other beforehand, which is a rare and strong signal for a claim usually reported as a vague hunch. The practical consequence is about timing: purge or compact context before crossing that threshold, not after the drop already shows up in the output. (*Emmanuel Sciara, Dev With AI Meetup, 2026. Malo and Dorian, same corpus and year, describe the same shift as abrupt rather than gradual.*)
+**A sharp, non-linear quality drop shows up around 70% of the context budget used, rather than a smooth decline.** Nine speakers at the same meetup independently reported this same threshold, which this guide reads as a notably strong signal for a claim usually offered as a vague hunch. The practical consequence is about timing: purge or compact context before crossing that threshold, not after the drop already shows up in the output. (*Emmanuel Sciara, Dev With AI Meetup, 2026. Malo and Dorian, same event and year, describe the same shift as abrupt rather than gradual.*)
 
 ### Path-Scoping and Budget Efficiency
 

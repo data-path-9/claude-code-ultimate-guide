@@ -124,7 +124,7 @@ Consolidated section on scored-dataset evaluation, statistical CI/CD, LLM-as-jud
 **Source**: ep 326 (Zineb Bendhiba), ep 360 (Guillaume Lours)
 Documented incidents on guardrail evasion and unsupervised agent data loss.
 
-**Guide section**: [MCP Vetting Workflow](../security/security-hardening.md#mcp-vetting-workflow)
+**Guide section**: [MCP Vetting Workflow](../security/security-hardening.md#11-mcp-vetting-workflow)
 **Source**: ep 346, Jocelyn N'takpe (Head of Engineering & Architecture, ManoMano)
 Command allowlist recommendation, illustrated with a real incident.
 
@@ -263,17 +263,21 @@ Verifying AI-generated code as the emerging critical skill.
 **Podcast**: The Product Crew (French product management podcast)
 **License**: Editorial citation (no code)
 
-The Product Crew episodes were analyzed and paraphrased into the guide's adoption and roles pages, filtered strictly for relevance to AI adoption decisions. No direct quotes appear. Two of the cited field reports (Ask For The Moon, bsport) are single-instance 2026 accounts, not established industry data, and are presented as such.
+The Product Crew episodes were analyzed and paraphrased into the guide's adoption, roles, and ops pages, filtered strictly for relevance to AI adoption decisions. No direct quotes appear. The cited Ask For The Moon field report is a single-instance 2026 account, not established industry data, and is presented as such.
 
 ### Sections drawing on The Product Crew
 
 **Guide section**: [Adoption Approaches: What We Do Know](../roles/adoption-approaches.md#what-we-do-know-empirical-data)
-**Source**: The Product Crew, 2024-2026 (contexts: Alan, Payfit, Joko, bsport)
+**Source**: The Product Crew, 2024-2026 (contexts: Alan, Payfit, Joko)
 AI ownership by domain experts, adoption through practice rather than top-down rollout, and leadership buy-in as a prerequisite.
 
 **Guide section**: [ai-roles.md](../roles/ai-roles.md)
 **Source**: The Product Crew, 2026
 AI ownership by domain experts over a centralized innovation cell.
+
+**Guide section**: [ai-unit-economics.md](../ops/ai-unit-economics.md)
+**Source**: The Product Crew, AI transformation field report, 2026 (context: Ask For The Moon)
+The "tokens into ROI" framing used to introduce the stakes of unit economics.
 
 ---
 
