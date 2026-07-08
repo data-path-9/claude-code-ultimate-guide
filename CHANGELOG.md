@@ -12,9 +12,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - **Audience pages published on the landing** (`docs/for-product-managers.md`, `for-tech-leads.md`, `for-cto.md`, `for-cio-ceo.md`): the four role pages were only readable on GitHub. The landing build script (`prepare-guide-content.mjs`) now pulls them from `docs/` and serves them at `/guide/for-product-managers/`, `/guide/for-tech-leads/`, `/guide/for-cto/`, and `/guide/for-cio-ceo/`, with a "For Your Role" section on the `/guide/` index, sitemap and RSS entries, and Cmd+K search coverage. Deep links like `ultimate-guide.md#35-team-configuration-at-scale` now resolve to the correct chapter page instead of landing on the chapter index (new `resolveUltimateGuideAnchors` pass, applied to all served pages).
 
-- **Claude Code Releases**: Updated tracking to v2.1.199 (from v2.1.197)
+- **Claude Code Releases**: Updated tracking to v2.1.204 (from v2.1.197)
   - v2.1.198 (2026-07-01): subagents now run in the background by default, Claude in Chrome generally available, background agents auto-commit and open draft PRs, Explore agent inherits the session model, `/agents` wizard removed
   - v2.1.199 (2026-07-02): stacked slash-skill invocations load up to 5 skills, transient 429s retried automatically for subscribers, streaming partials preserved on mid-stream errors, subagents return partial work and report API errors to the parent instead of failing silently
+  - v2.1.200 (2026-07-03): `AskUserQuestion` no longer auto-continues by default, "default" permission mode renamed "Manual" across CLI/VS Code/JetBrains, background sessions fixed after sleep/wake and stale `daemon.lock` crashes
+  - v2.1.201 (2026-07-03): Sonnet 5 sessions no longer use the mid-conversation system role for harness reminders
+  - v2.1.202 (2026-07-06): "Dynamic workflow size" setting in `/config`, `workflow.run_id`/`workflow.name` OTel attributes, `/review <pr>` reverted to fast single-pass (use `/code-review <level> <pr#>` for multi-agent)
+  - v2.1.203 (2026-07-07): login-expiry warning, manual-mode footer badge, background-agent stability fixes (macOS stall, stale daemon tokens, crash-looping, silent auto-upgrade failure), ~7 MB binary size reduction
+  - v2.1.204 (2026-07-08): fixed hook events not streaming during SessionStart hooks in headless sessions
 
 ### Fixed
 
