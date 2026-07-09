@@ -21,8 +21,13 @@
 
 <!-- Downloads -->
 <p align="center">
-  <a href="https://github.com/FlorianBruniaux/claude-code-ultimate-guide/releases/latest/download/guide-export.pdf"><img src="https://img.shields.io/badge/📄_Full_Guide-Download_PDF-dc2626?style=for-the-badge" alt="Download PDF"/></a>
-  <a href="https://github.com/FlorianBruniaux/claude-code-ultimate-guide/releases/latest/download/guide-export.epub"><img src="https://img.shields.io/badge/📚_Full_Guide-Download_EPUB-7c3aed?style=for-the-badge" alt="Download EPUB"/></a>
+  <strong>📖 Full guide, offline (~700 pages)</strong>
+</p>
+<p align="center">
+  <a href="https://github.com/FlorianBruniaux/claude-code-ultimate-guide/releases/latest/download/guide-export.pdf"><img src="https://img.shields.io/badge/🇬🇧_EN-PDF-dc2626?style=for-the-badge" alt="Download PDF (EN)"/></a>
+  <a href="https://github.com/FlorianBruniaux/claude-code-ultimate-guide/releases/latest/download/guide-export.epub"><img src="https://img.shields.io/badge/🇬🇧_EN-EPUB-7c3aed?style=for-the-badge" alt="Download EPUB (EN)"/></a>
+  <a href="https://github.com/FlorianBruniaux/claude-code-ultimate-guide/releases/latest/download/guide-export-fr.pdf"><img src="https://img.shields.io/badge/🇫🇷_FR-PDF-dc2626?style=for-the-badge" alt="Télécharger PDF (FR)"/></a>
+  <a href="https://github.com/FlorianBruniaux/claude-code-ultimate-guide/releases/latest/download/guide-export-fr.epub"><img src="https://img.shields.io/badge/🇫🇷_FR-EPUB-7c3aed?style=for-the-badge" alt="Télécharger EPUB (FR)"/></a>
 </p>
 
 <!-- Meta -->
