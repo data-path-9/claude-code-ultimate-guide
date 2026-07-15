@@ -16,7 +16,7 @@
 |-----------|-------|
 | **Initial Score** | 3/5 |
 | **Score after testing** | **2/5** (downgraded) |
-| **Final Decision** | Watch only. Do not integrate as a recommended tool. |
+| **Final Decision** | Tool: watch only, not recommended. Two teaching points extracted and integrated (`data-privacy.md` §Risk 7, `ai-unit-economics.md` §token estimation), taught as patterns without naming the product. |
 
 Downgrade rationale: hands-on testing showed the tool count is honest but the primitives are shallow heuristics, and every input is sent to a third-party server. For an audience that runs Claude Code over proprietary code, that trade is wrong by default.
 
@@ -115,6 +115,14 @@ The announcement says "nothing stored, nothing leaves your control." That statem
 
 For an audience running Claude Code over proprietary source, "send your code to a third-party server to divide its length by four" is not a trade worth making.
 
+**MCP mode is categorically worse than CLI mode, and this is the decisive point.**
+
+Framed as "you are sending data to a third party", this is a discipline problem, and a careful team can live with a hosted tool by never pasting anything sensitive into it. That framing is too weak.
+
+In CLI mode a human picks each input. In MCP mode the agent picks, and the agent has the codebase in context. It will hand a proprietary source file to a hosted `count_tokens` because that is an entirely reasonable thing to do with a token counter. Nobody approved that call, because nobody was asked. The client's own safety engineering does not reach this case: the `0600` temp files and the secret-param warning defend against argv leaks and local attacks, not against an agent choosing what to send.
+
+So the tool converts a rule a team can hold ("don't paste customer data into it") into one it cannot ("don't let the agent read the wrong file"). For regulated data, minors' data, or client source under NDA, that is disqualifying independently of code quality. This was surfaced by a second, independent evaluation session run against an unrelated production codebase, and it is a sharper argument than the data-transfer framing this evaluation opened with.
+
 ### 5. Credit where it is due: the client code is good
 
 The 336 lines are better engineered than most of what gets posted:
@@ -146,14 +154,16 @@ The engineering of the client deserves respect and the project is three days old
 
 Re-evaluate if the project ships local execution (the tools are simple enough to run client-side, which would resolve the privacy issue outright), publishes the server source, or replaces the token heuristic with a real tokenizer.
 
-### Teaching value retained
+### Teaching value extracted (integrated 2026-07-15)
 
-Two points from this evaluation are reusable regardless of the tool:
+Two points from this evaluation outlived the tool and were carried into the guide, taught as patterns without naming the product, since the pattern is what generalizes and a day-0 free project does not belong in a "Known Risks" section by name:
 
-1. **A CLI that looks local can be a network client.** "Zero dependencies, no signup" reads as local and is not. Worth checking `npm view <pkg>` unpacked size against advertised functionality: 17 KB cannot contain 148 tools. This generalizes to any MCP server, and fits `guide/security/data-privacy.md`.
-2. **`chars/4` token estimation fails on code by roughly a third.** Useful counter-example for anyone estimating context budget or cost from string length.
+1. **A CLI that looks local can be a network client**, and MCP mode turns that from a discipline problem into a structural one. Integrated as `guide/security/data-privacy.md` §Risk 7, with the arithmetic check (`npm view` unpacked size against advertised functionality: 17 KB cannot hold 148 tools) and the read-the-source-first command.
+2. **`chars/4` token estimation fails by -35% on code and -23% on accented French**, in the unsafe direction. Integrated as `guide/ops/ai-unit-economics.md` §Do not estimate tokens by string length, together with the second-order variant (counting the raw user string while sending a wrapped payload with system header, role prefixes, and instruction block).
 
-Neither requires naming this tool, and neither is urgent. Logged here rather than integrated.
+Both points were independently confirmed against a real production codebase during a second evaluation session: the `chars/4` helper and the count-the-wrong-string bug were both present in shipping code, guarding a hard provider limit, on French user input. That is what moved these from "interesting observation" to guide content. The codebase is private and is not cited; the guide sections use reconstructed examples.
+
+The useful irony worth recording: a tool scored 2/5 and rejected produced more value by prompting an audit of our own assumptions than it would have delivered if adopted. That is a reason to keep evaluating low scorers seriously rather than dismissing them at the announcement.
 
 ---
 

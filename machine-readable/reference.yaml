@@ -389,6 +389,7 @@ deep_dive:
   # AI Unit Economics (guide/ops/ai-unit-economics.md) - Added 2026-07-07
   ai_unit_economics_guide: "guide/ops/ai-unit-economics.md"
   ai_unit_economics_description: "Original synthesis on the unit economics of agentic AI usage: per-task cost decomposition, real cost levers (complexity routing, sub-agent isolation, exit criteria), the break-even point of an autonomous agent, and team budget governance. Flagged explicitly as original analysis, not a practitioner-sourced compilation."
+  ai_unit_economics_token_estimation: "guide/ops/ai-unit-economics.md#do-not-estimate-tokens-by-string-length (why chars/4 breaks: measured -35% on code, -23% on accented French, erring in the unsafe direction; wrong tokenizer for Claude; plus the count-the-wrong-string second-order bug)"
   # Learning with AI (guide/roles/learning-with-ai.md)
   learning_quick_check: "guide/roles/learning-with-ai.md:38"
   learning_uval_protocol: "guide/roles/learning-with-ai.md:218"
@@ -530,6 +531,7 @@ deep_dive:
   data_privacy_known_risks: "guide/security/data-privacy.md#2-known-risks"
   data_privacy_bug_command: "guide/security/data-privacy.md#risk-4-the-bug-command-sends-everything-retained-5-years"
   data_privacy_browser_native_messaging: "guide/security/data-privacy.md#risk-6-claude-desktop-browser-integration-silent-native-messaging-host-installation"
+  data_privacy_local_looking_client: "guide/security/data-privacy.md#risk-7-the-local-looking-network-client (a CLI/MCP server can be 'zero dependencies, no signup' and still POST every input to a third party; size-vs-functionality check; why MCP mode turns a discipline problem into a structural one since the agent picks the input)"
   data_privacy_protective_measures: "guide/security/data-privacy.md#3-protective-measures"
   data_privacy_file_exclusions: "guide/security/data-privacy.md#31-configure-file-exclusions"
   data_privacy_telemetry_optout: "guide/security/data-privacy.md#33-opt-out-of-telemetry-and-error-reporting"

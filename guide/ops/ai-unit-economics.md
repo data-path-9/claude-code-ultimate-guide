@@ -102,6 +102,36 @@ Cache reads are priced far below fresh input (a fraction of the input rate), whi
 
 The raw token counts for a real session live in the JSONL files at `~/.claude/projects/<project>/`. Tools like `ccusage` (see [observability.md §External Monitoring Tools](./observability.md#external-monitoring-tools)) read those files and produce exact per-session costs, so you do not have to estimate by hand once you want real numbers.
 
+### Do not estimate tokens by string length
+
+The cost function above is only as good as the token counts you feed it. The usual shortcut is `chars / 4`, which appears in countless helpers as a one-liner:
+
+```js
+const estimateTokens = (text) => Math.ceil(text.length / 4);   // wrong in the unsafe direction
+```
+
+It holds for English prose and falls apart everywhere else. Measured against the real `cl100k_base` tokenizer (July 2026):
+
+| Input type | Real tokens | `chars / 4` | Error |
+|-----------|-------------|-------------|-------|
+| English prose | 10 | 11 | +10% |
+| JavaScript snippet | 23 | 15 | **-35%** |
+| French text with accents | 22 | 17 | **-23%** |
+
+Two properties make this worse than a plain inaccuracy.
+
+The error direction is unsafe. The heuristic *underestimates* exactly where you care most, on code and on accented or non-Latin text, so it reports that a payload fits when it does not. A budget guard built on it lets through what it was written to stop, silently, and the failure surfaces later as a truncation or an API error rather than as a wrong number.
+
+The tokenizer is the wrong one anyway. `cl100k_base` is OpenAI's. Claude uses a different tokenizer, so a `chars / 4` estimate aimed at a Claude context window stacks a second error on top of the first. For real numbers, count with the provider's own endpoint ([Anthropic's token counting API](https://docs.claude.com/en/docs/build-with-claude/token-counting)) or read actual usage from the response, and keep heuristics for rough sizing only.
+
+**The subtler bug: count what you send, not what the user typed.**
+
+Even a correct tokenizer gives a wrong answer when it measures the wrong string. A guard that counts the raw user message, then sends a prompt assembled from that message plus a system header, role prefixes, and an instruction block, is under-counting by everything the wrapper adds. The gap is invisible in tests, because it grows with formatting that tests usually skip.
+
+Count the final serialized payload, immediately before the call, at the same place the request is built. If a fallback path trims the input to fit, it has to re-measure after trimming rather than assume the trim was enough.
+
+If you already log truncation events, that is where the answer lives. A counter on "guard said it fit, provider disagreed" turns this from an argument into a measurement.
+
 ---
 
 ## 3. The real cost-reduction levers
