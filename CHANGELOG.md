@@ -36,7 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - **Audience pages published on the landing** (`docs/for-product-managers.md`, `for-tech-leads.md`, `for-cto.md`, `for-cio-ceo.md`): the four role pages were only readable on GitHub. The landing build script (`prepare-guide-content.mjs`) now pulls them from `docs/` and serves them at `/guide/for-product-managers/`, `/guide/for-tech-leads/`, `/guide/for-cto/`, and `/guide/for-cio-ceo/`, with a "For Your Role" section on the `/guide/` index, sitemap and RSS entries, and Cmd+K search coverage. Deep links like `ultimate-guide.md#35-team-configuration-at-scale` now resolve to the correct chapter page instead of landing on the chapter index (new `resolveUltimateGuideAnchors` pass, applied to all served pages).
 
-- **Claude Code Releases**: Updated tracking to v2.1.207 (from v2.1.197)
+- **Claude Code Releases**: Updated tracking to v2.1.210 (from v2.1.197)
   - v2.1.198 (2026-07-01): subagents now run in the background by default, Claude in Chrome generally available, background agents auto-commit and open draft PRs, Explore agent inherits the session model, `/agents` wizard removed
   - v2.1.199 (2026-07-02): stacked slash-skill invocations load up to 5 skills, transient 429s retried automatically for subscribers, streaming partials preserved on mid-stream errors, subagents return partial work and report API errors to the parent instead of failing silently
   - v2.1.200 (2026-07-03): `AskUserQuestion` no longer auto-continues by default, "default" permission mode renamed "Manual" across CLI/VS Code/JetBrains, background sessions fixed after sleep/wake and stale `daemon.lock` crashes
@@ -47,6 +47,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - v2.1.205 (2026-07-08): `/doctor` becomes a full setup checkup (`/checkup` alias), agent view gains colored state words + classifier-written headlines, auto mode blocks transcript-file tampering and asks before `rm -rf` on unresolved variables, `--json-schema` invalid-schema and `format`-keyword fixes
   - v2.1.206 (2026-07-09): `/doctor` check proposes trimming checked-in `CLAUDE.md`, `/commit-push-pr` auto-allows push to the configured push remote (not just `origin`), background agents upgrade in the background right after an update, `/code-review` findings quality improved on claude-opus-4-8
   - v2.1.207 (2026-07-11): Bedrock/Vertex/Claude Platform on AWS default to Opus 4.8, terminal streaming perf fix for long content, auto mode without opt-in on Bedrock/Vertex/Foundry; breaking for plugins: `${user_config.*}` rejected in shell-form commands (shell-injection fix) and `pluginConfigs` no longer read from project-level settings
+  - v2.1.208 (2026-07-13): screen reader mode (`--ax-screen-reader`, `CLAUDE_AX_SCREEN_READER=1`, or `axScreenReader: true`), `vimInsertModeRemaps` for two-key insert-mode sequences like `jj`, `CLAUDE_CODE_PROCESS_WRAPPER` for corporate launchers, false "100% context used" after auto-update fixed, 200-row cap on very large markdown tables
+  - v2.1.209 (2026-07-14): fixed `/model` and other dialogs being blocked in `claude agents` background sessions (reverts an overly broad 2.1.208 guard)
+  - v2.1.210 (2026-07-14): live elapsed-time counter on the collapsed tool summary line, Agent tool hardened against indirect prompt injection, worktree-isolated subagents no longer able to run git-mutating commands against the main checkout, `ultracode` opt-in no longer fires on webhook payloads or relayed PR comments, auto mode's permission classifier defaults to Sonnet 5 for external sessions; deprecation: `Write(path)`/`NotebookEdit(path)`/`Glob(path)` permission rules now warn at startup, use `Edit(path)` or `Read(path)`
 
 ### Fixed
 
